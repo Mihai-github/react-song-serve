@@ -1,0 +1,38 @@
+enum MusicType{
+    Music @enum(value: "Music")
+}
+
+input ICreateSong{
+    id: ID
+    title: String! @rules(apply: ["string"])
+    url: String! @rules(apply: ["string"])
+    artist: String! @rules(apply: ["string"])
+    type: MusicType!
+    description: String
+    duration: String
+    playList: belongsToPlayList
+}
+
+
+
+type Song{
+    id: ID
+    title: String!
+    url: String!
+    artist: String!
+    type: MusicType!
+    description: String
+    duration: String
+    playList: PlayList @belongsTo(relation: "playList")
+}
+
+extend type Mutation{
+    #createSong(id: ID, title: String!, url: String!, artist: String!, description: String, type: MusicType!): Song @upsert
+    createSongs(input: ICreateSong! @spread): Song @upsert
+    deleteSong(id: ID!): Song @delete
+
+}
+
+extend type Query{
+    songs: [Song!]! @all
+}

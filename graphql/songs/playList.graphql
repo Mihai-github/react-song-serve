@@ -1,0 +1,30 @@
+
+input IPlayListFields{
+    id: ID
+    name: String! @rules(apply: ["string"])
+    imageUrl: String! @rules(apply: ["string"])
+}
+
+type PlayList{
+    id: ID
+    name: String!
+    imageUrl: String!
+}
+
+input belongsToPlayList{
+    connect: ID
+    create: IPlayListFields
+    disconnect: Boolean
+}
+
+extend type Mutation{
+    createPlayList(input: IPlayListFields! @spread): PlayList @upsert
+    deletePlayList(id: ID! @eq ): PlayList @delete
+}
+
+extend type Query{
+    playList: [PlayList!]! @all
+    getPlayList(id: ID! @eq): PlayList! @find
+    playListSongs(play_list_id: ID! @eq): [Song!]! @all
+
+}

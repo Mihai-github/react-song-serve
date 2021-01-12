@@ -1,0 +1,16 @@
+
+
+type qrCode{
+    id: ID
+    qrCode: String!
+    playList: PlayList @belongsTo(relation: "playList")
+    song: Song @belongsTo(relation: "song")
+}
+
+extend type Mutation{
+    createQrCode(play_list_id: ID!, song_id: ID!, qrCode: String!): qrCode @create
+}
+
+extend type Query{
+    qrCodes: [qrCode!]! @all
+}
